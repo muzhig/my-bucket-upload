@@ -1,0 +1,57 @@
+service: ${env:SERVICE_NAME}
+app: my-bucket-upload
+org: muzhig
+frameworkVersion: '3'
+useDotenv: true
+variablesResolutionMode: 20210326
+configValidationMode: error
+
+provider:
+  name: aws
+  profile: ${env:AWS_PROFILE, "default"}
+  region: ${env:AWS_REGION, "us-east-1"}
+  runtime: python3.9
+  lambdaHashingVersion: 20201221
+  memorySize: 128
+  # stage: dev
+  environment:
+    SENTRY_DSN: ${env:SENTRY_DSN}
+    STAGE: ${opt:stage, 'dev'}
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+          Resource:
+            - arn:aws:s3:::${env:S3_BUCKET}/*
+#        - Effect: "Allow"
+#          Action:
+#            - rekognition:*
+#            - textract:*
+#          Resource: "*"
+
+plugins:
+  - serverless-python-requirements
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!package-lock.json'
+
+
+functions:
+  signUploadUrl:
+    handler: handler.sign_upload_url
+    events:
+      - http:
+          path: /sign-upload-url
+          method: POST
+          cors: true
+    reservedConcurrency: 1
+    timeout: 30
+    environment:
+      S3_BUCKET: ${env:S3_BUCKET}
+      MAX_FILE_SIZE: ${env:MAX_FILE_SIZE}
+
+
