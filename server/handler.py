@@ -46,9 +46,9 @@ def generate_presigned_url(file_name, content_type, file_size, description=None)
             'Key': key,
             'ContentType': content_type,
             'ContentLength': file_size,
-            'ContentDisposition': 'attachment; filename="{}"'.format(file_name),
+            'ContentDisposition': f'attachment; filename="{file_name}"',
         },
-        ExpiresIn=3600
+        ExpiresIn=3600,
     )
     get_url = s3.generate_presigned_url(
         'get_object',
@@ -76,27 +76,18 @@ def sign_upload_url(event, context):
 
     urls = generate_presigned_url(**body)
 
-    response = {
+    return {
         "statusCode": 200,
-        "body": json.dumps({
-            "url": urls['put_url'],
-            "get_url": urls['get_url'],
-            "headers": {
-                "Content-Type": body['content_type'],
-                'Content-Disposition': 'attachment; filename="{}"'.format(body['file_name']),
-#                 'amz-meta-description': body['description'],
-            },
-            "method": "put"
-        }),
+        "body": json.dumps(
+            {
+                "url": urls['put_url'],
+                "get_url": urls['get_url'],
+                "headers": {
+                    "Content-Type": body['content_type'],
+                    'Content-Disposition': f"""attachment; filename="{body['file_name']}\"""",
+                },
+                "method": "put",
+            }
+        ),
         "headers": resp_headers,
     }
-    return response
-
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """
