@@ -86,7 +86,7 @@ export default function FileUpload (props: any) {
     uppy={uppy}
     style={{display: 'flex', justifyContent: 'center', marginTop: '4rem'}}
     showLinkToFileUploadResult={true}
-    proudlyDisplayPoweredByUppy={true}
+    proudlyDisplayPoweredByUppy={false}
     note={"Drop a sheet in any format - Excel, CSV, TSV"}
     metaFields={[
        {id: 'name', name: 'Name', placeholder: 'You can rename the file here'},
