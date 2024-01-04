@@ -9,29 +9,32 @@ import sentry_init
 
 class UploadUrlSchema(Schema):
     file_name = fields.Str(required=True, validate=validate.Regexp(r'.+\..+'))
-    content_type = fields.Str(required=True, validate=validate.OneOf([
-      'text/plain',
-      'text/csv',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.oasis.opendocument.spreadsheet',
-      'application/vnd.oasis.opendocument.text',
-     # tsv
-      'text/tab-separated-values',
-      'text/x-tab-separated-values',
-      'text/tab-separated-text',
-      'text/x-tab-separated-text',
-      'text/tsv',
-      'text/x-tsv',
-     # json
-      'application/json',
-      'text/json',
-     # json lines
-      'application/x-ndjson',
-      'application/x-jsonlines',
-      'application/jsonlines',
-      'application/json-lines',
-    ]))
+    content_type = fields.Str(
+        required=True, 
+        # validate=validate.OneOf([
+        #     'text/plain',
+        #     'text/csv',
+        #     'application/vnd.ms-excel',
+        #     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        #     'application/vnd.oasis.opendocument.spreadsheet',
+        #     'application/vnd.oasis.opendocument.text',
+        #     # tsv
+        #     'text/tab-separated-values',
+        #     'text/x-tab-separated-values',
+        #     'text/tab-separated-text',
+        #     'text/x-tab-separated-text',
+        #     'text/tsv',
+        #     'text/x-tsv',
+        #     # json
+        #     'application/json',
+        #     'text/json',
+        #     # json lines
+        #     'application/x-ndjson',
+        #     'application/x-jsonlines',
+        #     'application/jsonlines',
+        #     'application/json-lines',
+        # ]),
+    )
     file_size = fields.Int(required=True, validate=validate.Range(min=0, max=int(os.environ['MAX_FILE_SIZE'])))
     description = fields.Str(required=False)
 
