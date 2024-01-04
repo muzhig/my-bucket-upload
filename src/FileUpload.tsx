@@ -29,8 +29,8 @@ export default function FileUpload (props: any) {
     const _uppy = new Uppy({
       // id: 'my-uppy',
       restrictions: {
-        maxFileSize: 10000000, //10MB
-        allowedFileTypes,
+        maxFileSize: 300_000_000, //100 MB
+        // allowedFileTypes,
         maxNumberOfFiles: 1,
       },
       autoProceed: false,
